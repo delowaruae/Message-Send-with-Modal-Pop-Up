@@ -3,198 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> B2BDubai24 </title>
+    <title>Mobile Message Center</title>
     <style>
-        /* CSS RESET & BASE */
-        body { font-family: Arial, sans-serif; margin: 0; background-color: #f5f5f5; color: #333; }
-        a { text-decoration: none; color: #005ea7; }
-
-        /* HEADER & NAV */
-        header { background: #fff; border-bottom: 1px solid #ddd; padding: 10px 5%; display: flex; justify-content: space-between; align-items: center; }
-        .logo { color: #d12124; font-size: 24px; font-weight: bold; }
-        nav { background: #d12124; display: flex; padding: 0 5%; }
-        nav a { color: #fff; padding: 12px 20px; font-size: 14px; }
-        nav a.active { background: #a81a1d; }
-
-        /* MAIN PAGE CONTENT */
-        .breadcrumb { padding: 15px 5%; font-size: 12px; color: #666; }
-        .container { background: #fff; width: 90%; max-width: 1000px; margin: 0 auto; border: 1px solid #ddd; padding: 40px; box-sizing: border-box; }
-        h2 { font-size: 18px; margin-bottom: 25px; }
-        .form-row { display: flex; margin-bottom: 20px; }
-        .label { width: 100px; font-size: 13px; padding-top: 5px; text-align: right; margin-right: 15px; }
-        .label span { color: #d12124; }
-        textarea { width: 100%; height: 160px; border: 1px solid #ccc; padding: 10px; resize: none; border-radius: 2px; }
-        .hint { font-size: 12px; color: #999; margin-top: 5px; }
-
-        /* BUTTONS */
-        .btn-red { background: #ff4747; color: #fff; border: none; padding: 10px 35px; border-radius: 3px; cursor: pointer; font-size: 14px; }
-        .btn-red:hover { background: #e03e3e; }
-
-        /* MODAL SYSTEM */
-        .modal-overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.5); display: none; /* Hidden by default */
-            justify-content: center; align-items: center; z-index: 1000; 
-        }
-        .modal-box { 
-            background: #fff; width: 550px; border-radius: 4px; padding: 30px; 
-            position: relative; animation: fadeIn 0.3s ease; 
-        }
-        .close-btn { position: absolute; right: 20px; top: 15px; font-size: 24px; color: #999; cursor: pointer; }
-
-        /* MODAL FORM ELEMENTS */
-        .modal-group { margin-bottom: 18px; }
-        .modal-group label { display: block; font-size: 13px; margin-bottom: 6px; }
-        .modal-group label span { color: #d12124; }
-        .input-text { width: 100%; padding: 8px; border: 1px solid #ccc; box-sizing: border-box; }
-        .input-flex { display: flex; gap: 8px; }
-        
-        /* VALIDATION ERRORS */
-        .error-box { 
-            background: #fff1f0; border: 1px solid #ffccc7; color: #d12124; 
-            font-size: 12px; padding: 4px 8px; margin-top: 4px; display: none; 
+        :root {
+            --primary-blue: #2b85e4;
+            --dark-blue: #1d71d3;
+            --success: #52c41a;
+            --error: #ff4d4f;
+            --bg: #f0f2f5;
         }
 
-        /* SUCCESS SCREEN */
-        #success-content { text-align: center; display: none; }
-        .success-icon { 
-            width: 50px; height: 50px; background: #52c41a; color: #fff; 
-            border-radius: 50%; display: flex; align-items: center; 
-            justify-content: center; font-size: 30px; margin: 0 auto 20px; 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            background-color: var(--bg);
+            color: #333;
+            overflow-x: hidden;
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Mobile Header */
+        header {
+            background: var(--primary-blue);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* Mobile Container - Full Width on small screens */
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            background: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .account-info {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .info-row { margin-bottom: 10px; }
+        .info-row b { color: #64748b; font-size: 11px; text-transform: uppercase; display: block; }
+
+        /* Form Styling */
+        .field { margin-bottom: 18px; }
+        label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+        label span { color: var(--error); }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 16px; /* Prevents iOS auto-zoom on focus */
+            box-sizing: border-box;
+        }
+
+        /* Dynamic Flag & Phone Row */
+        .phone-row {
+            display: flex;
+            gap: 8px;
+        }
+        .flag-box {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 0 10px;
+            border-radius: 8px;
+            white-space: nowrap;
+            height: 48px;
+        }
+        .flag-box img { width: 20px; height: 14px; object-fit: cover; }
+        .code { font-weight: bold; font-size: 14px; }
+
+        /* Resizable Wrap */
+        textarea {
+            height: 120px;
+            resize: vertical;
+            min-height: 80px;
+            line-height: 1.4;
+        }
+
+        .hint { font-size: 11px; color: #94a3b8; margin-top: 5px; }
+
+        /* Mobile Action Button */
+        .btn-send {
+            width: 100%;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-send:active { background: var(--dark-blue); transform: scale(0.98); }
+
+        /* Toast Dialogue for Mobile */
+        .toast {
+            position: fixed;
+            top: -100px;
+            left: 5%;
+            right: 5%;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            transition: top 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            border-left: 4px solid var(--success);
+        }
+        .toast.show { top: 20px; }
+        .toast-icon { background: var(--success); color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+
+        .error { color: var(--error); font-size: 12px; display: none; margin-top: 4px; }
     </style>
 </head>
 <body>
 
-<header><div class="logo">B2BDubai24</div></header>
-<nav>
-    <a href="#">Home</a>
-    <a href="#">Products</a>
-    <a href="#" class="active">Contact Us</a>
-</nav>
-<div class="breadcrumb">Supplier Homepage > Contact Us</div>
+<header>Send Inquiry</header>
 
-<div class="container">
-    <h2>Send your message to this supplier</h2>
-    <div class="form-row">
-        <div class="label">From:</div>
-        <div><strong>homez24am@gmail.com</strong></div>
-    </div>
-    <div class="form-row">
-        <div class="label"><span>*</span>Message:</div>
-        <div style="flex: 1;">
-            <textarea id="main-msg" placeholder="Detail your product requirements here..."></textarea>
-            <div class="hint">Enter between 20 to 4,000 characters.</div>
-            <div style="margin-top: 20px;">
-                <button class="btn-red" onclick="handleFirstSend()">Send</button>
-            </div>
-        </div>
+<div id="toast" class="toast">
+    <div class="toast-icon">✓</div>
+    <div>
+        <div style="font-weight:bold; font-size:14px;">Sent Successfully</div>
+        <div style="font-size:12px; color:#666;">Supplier will be notified.</div>
     </div>
 </div>
 
-<div class="modal-overlay" id="modalOverlay">
-    <div class="modal-box">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
-        
-        <div id="form-content">
-            <div class="modal-group">
-                <label><span>*</span>Email Address</label>
-                <input type="text" class="input-text" id="email" value="homez24am@gmail.com">
-                <div class="error-box" id="err-email">Please enter your email address.</div>
-            </div>
-
-            <div class="modal-group">
-                <label><span>*</span>Full Name</label>
-                <div class="input-flex">
-                    <select style="width: 70px;"><option>Mr.</option><option>Ms.</option></select>
-                    <input type="text" class="input-text" id="fullname" placeholder="Enter name">
-                </div>
-                <div class="error-box" id="err-name">Please enter your full name.</div>
-            </div>
-
-            <div class="modal-group">
-                <label><span>*</span>Country/Region</label>
-                <select class="input-text"><option>United Arab Emirates 🇦🇪</option></select>
-            </div>
-
-            <div class="modal-group">
-                <label><span>*</span>Company Name</label>
-                <input type="text" class="input-text" id="company">
-                <div class="error-box" id="err-company">Please enter your company name.</div>
-            </div>
-
-            <div class="modal-group">
-                <label><span>*</span>Contact Number</label>
-                <div class="input-flex">
-                    <select style="width: 100px;"><option>Mobile</option></select>
-                    <input type="text" style="width: 50px;" value="971">
-                    <input type="text" class="input-text" id="phone" placeholder="Mobile phone number">
-                </div>
-                <div class="error-box" id="err-phone">Phone number cannot be empty.</div>
-            </div>
-
-            <button class="btn-red" onclick="handleFinalSend()">Send</button>
-            <div style="margin-top: 15px; font-size: 11px; color: #999; border-top: 1px solid #eee; padding-top: 10px;">
-                Leave your contact information for the suppliers.
-            </div>
+<div class="container">
+    <div class="account-info">
+        <div class="info-row">
+            <b>From (Your Account)</b>
+            homez24am@gmail.com
         </div>
-
-        <div id="success-content">
-            <div class="success-icon">✓</div>
-            <h2 style="margin-top: 0;">Sent Successfully!</h2>
-            <p style="font-size: 14px; color: #666;">
-                Notification of supplier's reply will be sent to <strong>homez24am@gmail.com</strong>. 
-                You can also check supplier's quote in your <a href="#">buyer account</a> anytime.
-            </p>
+        <div class="info-row" style="margin-bottom:0">
+            <b>To (Supplier)</b>
+            Mrs. Liyan (Liyan Textile Ltd.)
         </div>
     </div>
+
+    <form id="mobileForm">
+        <div class="field">
+            <label><span>*</span>Full Name</label>
+            <input type="text" id="name" placeholder="John Doe" required>
+        </div>
+
+        <div class="field">
+            <label><span>*</span>Company Name</label>
+            <input type="text" id="company" placeholder="Company Ltd" required>
+        </div>
+
+        <div class="field">
+            <label><span>*</span>Country/Region</label>
+            <select id="country" onchange="updateFlag()">
+                <option value="ae" data-code="+971">United Arab Emirates</option>
+                <option value="cn" data-code="+86">China</option>
+                <option value="us" data-code="+1">United States</option>
+                <option value="gb" data-code="+44">United Kingdom</option>
+                <option value="in" data-code="+91">India</option>
+                <option value="bd" data-code="+880">Bangladesh</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label><span>*</span>Contact Number</label>
+            <div class="phone-row">
+                <div class="flag-box">
+                    <img id="flagImg" src="https://flagcdn.com/w40/ae.png" alt="flag">
+                    <span class="code" id="codeTxt">+971</span>
+                </div>
+                <input type="tel" id="phone" placeholder="Mobile Number" required>
+            </div>
+            <div id="phoneErr" class="error">Enter a valid 7-15 digit number.</div>
+        </div>
+
+        <div class="field">
+            <label><span>*</span>Message:</label>
+            <textarea id="msg" placeholder="Detail your requirements here..."></textarea>
+            <div class="hint">Min 20 characters. Drag box to resize.</div>
+        </div>
+
+        <button type="submit" class="btn-send">Send Inquiry Now</button>
+    </form>
 </div>
 
 <script>
-    const overlay = document.getElementById('modalOverlay');
-    const formContent = document.getElementById('form-content');
-    const successContent = document.getElementById('success-content');
+    const form = document.getElementById('mobileForm');
+    const toast = document.getElementById('toast');
+    const phone = document.getElementById('phone');
+    const country = document.getElementById('country');
+    const flagImg = document.getElementById('flagImg');
+    const codeTxt = document.getElementById('codeTxt');
 
-    // STEP 1: Main page send
-    function handleFirstSend() {
-        const msg = document.getElementById('main-msg').value;
-        if(msg.trim().length < 5) {
-            alert("Please enter a message for the supplier.");
-        } else {
-            overlay.style.display = 'flex';
+    function updateFlag() {
+        const iso = country.value;
+        const dial = country.options[country.selectedIndex].getAttribute('data-code');
+        flagImg.src = `https://flagcdn.com/w40/${iso}.png`;
+        codeTxt.innerText = dial;
+    }
+
+    // Number only validation
+    phone.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Mobile Validation
+        if (phone.value.length < 7 || phone.value.length > 15) {
+            document.getElementById('phoneErr').style.display = 'block';
+            phone.style.borderColor = 'var(--error)';
+            return;
         }
-    }
 
-    // STEP 2: Modal validation & send
-    function handleFinalSend() {
-        // Reset errors
-        document.querySelectorAll('.error-box').forEach(el => el.style.display = 'none');
-        
-        let isValid = true;
-        if(!document.getElementById('fullname').value) { document.getElementById('err-name').style.display='block'; isValid = false; }
-        if(!document.getElementById('company').value) { document.getElementById('err-company').style.display='block'; isValid = false; }
-        if(!document.getElementById('phone').value) { document.getElementById('err-phone').style.display='block'; isValid = false; }
-
-        if(isValid) {
-            // Transition to STEP 3
-            formContent.style.display = 'none';
-            successContent.style.display = 'block';
-
-            // Auto-disappear after 5 seconds
-            setTimeout(() => {
-                closeModal();
-            }, 5000);
+        if (document.getElementById('msg').value.trim().length < 20) {
+            alert("Message must be at least 20 characters.");
+            return;
         }
-    }
 
-    function closeModal() {
-        overlay.style.display = 'none';
-        // Reset modal state for next use
-        formContent.style.display = 'block';
-        successContent.style.display = 'none';
-    }
+        // Show Mobile Success Notification
+        toast.classList.add('show');
+        form.reset();
+        updateFlag();
+
+        // Hide after 5 seconds
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 5000);
+    });
 </script>
 
 </body>
